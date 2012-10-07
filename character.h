@@ -8,12 +8,17 @@ class Character: public RectangleShape
     private:
         int health;
 
+
     public:
         Character(int h);
         Character(Vector2f size);
         ~Character();
         void setHealth(int h);
         int getHealth();
+        void createFunnel();
+        RectangleShape funnel;
+        void moveCharacter(const Vector2f& offset);
+        void rotateFunnel(float angle);
 
 };
 #endif // CHARACTER_H_INCLUDED
