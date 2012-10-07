@@ -3,6 +3,7 @@
 Character::Character(int h)
 {
     setHealth(h);
+
 };
 
 Character::Character(Vector2f size)
@@ -11,6 +12,8 @@ Character::Character(Vector2f size)
     setFillColor(Color::Red);
     setSize(Vector2f(100.f,100.f));
     setPosition(0,size.y-getSize().y);
+    RectangleShape funnel;
+    funnel.setSize(Vector2f(100,10));
 };
 
 Character::~Character()
