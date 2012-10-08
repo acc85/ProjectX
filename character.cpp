@@ -13,7 +13,7 @@ Character::Character(Vector2f size)
     setSize(Vector2f(100.f,100.f));
     setPosition(0,size.y-getSize().y);
     funnel.setSize(Vector2f(100,10));
-    funnel.setPosition(getPosition().x+50,getPosition().y+50);
+    funnel.setPosition(getPosition().x+(getSize().x/2),getPosition().y+(getSize().y/2));
     funnel.setFillColor(Color::Red);
 };
 
