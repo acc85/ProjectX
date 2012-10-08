@@ -42,5 +42,5 @@ void Character::moveCharacter(const Vector2f& offset)
 void Character::rotateFunnel(float angle)
 {
     funnel.rotate(angle);
-}
+};
 
