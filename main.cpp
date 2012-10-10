@@ -116,20 +116,20 @@ int main()
                 background.move(Vector2f(-0.1,0));
             }
         }
-        if(Keyboard::isKeyPressed((Keyboard::Up)))
-        {
-            if(character.funnel.getRotation() > -50)
-            {
-                character.rotateFunnel(-0.1);
-            }
-        }
-        if(Keyboard::isKeyPressed((Keyboard::Down)))
-        {
-            if(character.funnel.getRotation() < 50)
-            {
-                 character.rotateFunnel(0.1);
-            }
-        }
+//        if(Keyboard::isKeyPressed((Keyboard::Up)))
+//        {
+//            if(character.funnel.getRotation() > -50)
+//            {
+//                character.rotateFunnel(-0.1);
+//            }
+//        }
+//        if(Keyboard::isKeyPressed((Keyboard::Down)))
+//        {
+//            if(character.funnel.getRotation() < 50)
+//            {
+//                 character.rotateFunnel(0.1);
+//            }
+//        }
         if(Mouse::isButtonPressed(Mouse::Left))
         {
             if(mousecount == 0)
@@ -158,6 +158,8 @@ int main()
         window.draw(background);
         window.draw(character);
         window.draw(character.funnel);
+        window.draw(character.Wheel1);
+        window.draw(character.Wheel2);
         window.draw(floor);
         window.draw(target);
         window.display();

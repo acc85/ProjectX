@@ -17,6 +17,8 @@ class Character: public RectangleShape
         int getHealth();
         void createFunnel();
         RectangleShape funnel;
+        CircleShape Wheel1;
+        CircleShape Wheel2;
         void moveCharacter(const Vector2f& offset);
         void rotateFunnel(float angle);
 
