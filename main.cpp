@@ -53,7 +53,6 @@ int main()
 
             if(Mouse::getPosition(window).x > character.getPosition().x && (moveRotation <= -50 || moveRotation >= 50))
             {
-                std::cout<<"here3"<<std::endl;
                 if(character.funnel.getRotation() > -50)
                     character.rotateFunnel(-0.1);
                 else
@@ -143,7 +142,6 @@ int main()
 				float shootAngleDegrees= (shootAngleRadians*(180/PI));
 				moveRotation = shootAngleDegrees;
 				float diff =  shootAngleDegrees;
-				std::cout<<"move rotation is: "<<moveRotation<<std::endl;
 				if(diff >= -50 && diff<= 50 && Mouse::getPosition(window).x > character.getPosition().x)
 				{
 				    funnelMove = 1;
