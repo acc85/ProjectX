@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <math.h>
+#include <time.h>
 #include "character.h"
 #define PI 3.14159265
 using namespace sf;
@@ -8,6 +9,9 @@ using namespace sf;
 
 int main()
 {
+    int funnelMove = 0;
+    float moveRotation;
+    Clock clock;
     int mousecount = 0;
     sf::RenderWindow window(sf::VideoMode(1024, 768), "SFML works!");
     Character character(Vector2f(window.getSize()));
@@ -30,6 +34,8 @@ int main()
     //std::cout<<"size is: "<<&newchar->getSize().x<<std::endl;
     while (window.isOpen())
     {
+
+        Time time =  clock.getElapsedTime();
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -40,6 +46,35 @@ int main()
                 target.setPosition(Mouse::getPosition(window).x-targetTexture.getSize().x/2, Mouse::getPosition(window).y-targetTexture.getSize().y/2);
             }
 
+        }
+
+        if(funnelMove == 1 && Mouse::getPosition(window).x > character.getPosition().x)
+        {
+
+            if(Mouse::getPosition(window).x > character.getPosition().x && (moveRotation <= -50 || moveRotation >= 50))
+            {
+                std::cout<<"here3"<<std::endl;
+                if(character.funnel.getRotation() > -50)
+                    character.rotateFunnel(-0.1);
+                else
+                    funnelMove = 0;
+            }
+            else if(moveRotation < 0)
+            {
+                if(character.funnel.getRotation() > moveRotation)
+                    character.rotateFunnel(-0.1);
+                else if(character.funnel.getRotation() < moveRotation)
+                    character.rotateFunnel(0.1);
+                else
+                    funnelMove = 0;
+            }
+            else if(moveRotation > 0 )
+            {
+                if(character.funnel.getRotation() < moveRotation)
+                    character.rotateFunnel(0.1);
+                else
+                    funnelMove = 0;
+            }
         }
 
         if (Keyboard::isKeyPressed(Keyboard::Left))
@@ -106,11 +141,13 @@ int main()
 				Vector2f shootVector = Vector2f(deltaX,deltaY);
 				float shootAngleRadians= (atanf(deltaY/deltaX));
 				float shootAngleDegrees= (shootAngleRadians*(180/PI));
+				moveRotation = shootAngleDegrees;
 				float diff =  shootAngleDegrees;
+				std::cout<<"move rotation is: "<<moveRotation<<std::endl;
 				if(diff >= -50 && diff<= 50 && Mouse::getPosition(window).x > character.getPosition().x)
-                    character.funnel.setRotation(diff);
-                else if(Mouse::getPosition(window).x > character.getPosition().x && diff <= -50)
-                    character.funnel.setRotation(-50);
+				{
+				    funnelMove = 1;
+				}
                 mousecount = 1;
             }
         }
