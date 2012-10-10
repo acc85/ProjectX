@@ -1,11 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <math.h>
 #include "character.cpp"
+#define PI 3.14159265
 using namespace sf;
 
 
 int main()
 {
+    int mousecount = 0;
     sf::RenderWindow window(sf::VideoMode(1024, 768), "SFML works!");
     Character character(Vector2f(window.getSize()));
     Texture backgroundTexture;
@@ -53,7 +56,6 @@ int main()
 
         if(Keyboard::isKeyPressed((Keyboard::Right)))
         {
-            std::cout<<"background x is: "<<background.getPosition().x<<std::endl;
             if (character.getPosition().x <= window.getSize().x/2-character.getSize().x)
             {
                 character.moveCharacter(Vector2f(0.1,0));
@@ -72,17 +74,35 @@ int main()
         {
             if(character.funnel.getRotation() > -50)
             {
-                 std::cout<<"the angle is: "<<character.funnel.getRotation()<<std::endl;
-                 character.rotateFunnel(-0.1);
+                character.rotateFunnel(-0.1);
             }
         }
         if(Keyboard::isKeyPressed((Keyboard::Down)))
         {
             if(character.funnel.getRotation() < 50)
             {
-                 std::cout<<"the angle is: "<<character.funnel.getRotation()<<std::endl;
                  character.rotateFunnel(0.1);
             }
+        }
+        if(Mouse::isButtonPressed(Mouse::Left))
+        {
+            if(mousecount == 0)
+            {
+                float realY = window.getSize().y;
+                float deltaY = (Mouse::getPosition(window).y - character.funnel.getPosition().y);
+				float deltaX = (Mouse::getPosition(window).x - character.funnel.getPosition().x);
+				Vector2f shootVector = Vector2f(deltaX,deltaY);
+				float shootAngleRadians= (atanf(deltaY/deltaX));
+				float shootAngleDegrees= (shootAngleRadians*(180/PI));
+				float diff =  shootAngleDegrees*-1;
+                std::cout<<"shootDegrees: "<<diff<<std::endl;
+                std::cout<<"MouseY: "<<Mouse::getPosition(window).y<<std::endl;
+                mousecount = 1;
+            }
+        }
+        else
+        {
+            mousecount = 0;
         }
         window.clear();
         window.draw(background);
