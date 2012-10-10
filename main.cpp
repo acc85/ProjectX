@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <math.h>
-#include "character.cpp"
+#include "character.h"
 #define PI 3.14159265
 using namespace sf;
 
@@ -12,10 +12,17 @@ int main()
     sf::RenderWindow window(sf::VideoMode(1024, 768), "SFML works!");
     Character character(Vector2f(window.getSize()));
     Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("MapTexture.png"))
+    RectangleShape floor;
+    Texture targetTexture;
+    targetTexture.loadFromFile("target.png");
+    Sprite target(targetTexture);
+    if (!backgroundTexture.loadFromFile("MapTexture.png") || !targetTexture.loadFromFile("target.png"))
          return EXIT_FAILURE;
     backgroundTexture.loadFromFile("MapTexture.png");
     Sprite background(backgroundTexture);
+    floor.setSize(Vector2f(backgroundTexture.getSize().x, 10));
+    floor.setPosition(0,window.getSize().y-floor.getSize().y);
+    floor.setFillColor(Color::Green);
     background.setPosition(0, 0);
 
     //pointer object
@@ -27,7 +34,12 @@ int main()
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
-            window.close();
+                window.close();
+            else if (event.type == Event::MouseMoved)
+            {
+                target.setPosition(Mouse::getPosition(window).x-targetTexture.getSize().x/2, Mouse::getPosition(window).y-targetTexture.getSize().y/2);
+            }
+
         }
 
         if (Keyboard::isKeyPressed(Keyboard::Left))
@@ -94,9 +106,11 @@ int main()
 				Vector2f shootVector = Vector2f(deltaX,deltaY);
 				float shootAngleRadians= (atanf(deltaY/deltaX));
 				float shootAngleDegrees= (shootAngleRadians*(180/PI));
-				float diff =  shootAngleDegrees*-1;
-                std::cout<<"shootDegrees: "<<diff<<std::endl;
-                std::cout<<"MouseY: "<<Mouse::getPosition(window).y<<std::endl;
+				float diff =  shootAngleDegrees;
+				if(diff >= -50 && diff<= 50 && Mouse::getPosition(window).x > character.getPosition().x)
+                    character.funnel.setRotation(diff);
+                else if(Mouse::getPosition(window).x > character.getPosition().x && diff <= -50)
+                    character.funnel.setRotation(-50);
                 mousecount = 1;
             }
         }
@@ -104,10 +118,13 @@ int main()
         {
             mousecount = 0;
         }
+        window.setMouseCursorVisible(false);
         window.clear();
         window.draw(background);
         window.draw(character);
         window.draw(character.funnel);
+        window.draw(floor);
+        window.draw(target);
         window.display();
     }
 
