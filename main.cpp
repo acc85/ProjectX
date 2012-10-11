@@ -78,8 +78,10 @@ int main()
 
         if (Keyboard::isKeyPressed(Keyboard::Left))
         {
+
             if (character.getPosition().x >= 0.f)
             {
+                character.rotateWheelsLeft();
                 if(background.getPosition().x >= 0)
                 {
                     character.moveCharacter(Vector2f(-0.1,0));
@@ -104,15 +106,20 @@ int main()
         {
             if (character.getPosition().x <= window.getSize().x/2-character.getSize().x)
             {
+                character.rotateWheelsRight();
                 character.moveCharacter(Vector2f(0.1,0));
             }
             else if(background.getPosition().x <= ((backgroundTexture.getSize().x-window.getSize().x)*-1.0f))
             {
                 if (character.getPosition().x < window.getSize().x-character.getSize().x)
+                {
+                    character.rotateWheelsRight();
                     character.moveCharacter(Vector2f(0.1,0));
+                }
             }
             else
             {
+                character.rotateWheelsRight();
                 background.move(Vector2f(-0.1,0));
             }
         }
@@ -158,9 +165,9 @@ int main()
         window.draw(background);
         window.draw(character);
         window.draw(character.funnel);
+        window.draw(floor);
         window.draw(character.Wheel1);
         window.draw(character.Wheel2);
-        window.draw(floor);
         window.draw(target);
         window.display();
     }
