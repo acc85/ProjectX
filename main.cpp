@@ -3,35 +3,62 @@
 #include <math.h>
 #include <time.h>
 #include "character.h"
+#include "projectile.h"
+#include <vector>
 #define PI 3.14159265
-using namespace sf;
+//using namespace sf;
 
 
 int main()
 {
+    int projectileFire = 0;
+    std::vector<Projectile> Projectiles;
     int funnelMove = 0;
     float moveRotation;
     Clock clock;
     int mousecount = 0;
     sf::RenderWindow window(sf::VideoMode(1024, 768), "SFML works!");
     Character character(Vector2f(window.getSize()));
+
+
+    //Set Texture variables
     Texture backgroundTexture;
-    RectangleShape floor;
     Texture targetTexture;
-    targetTexture.loadFromFile("target.png");
-    Sprite target(targetTexture);
-    if (!backgroundTexture.loadFromFile("MapTexture.png") || !targetTexture.loadFromFile("target.png"))
+    Texture projectileTexture;
+
+    //Set Floor Variable
+    RectangleShape floor;
+
+    //Check to see if Texture image files exist. If not then set game to close
+    if (!backgroundTexture.loadFromFile("MapTexture.png") || !targetTexture.loadFromFile("target.png") || !projectileTexture.loadFromFile("bullet.png"))
          return EXIT_FAILURE;
+
+    //Assign Texture Variables png images
     backgroundTexture.loadFromFile("MapTexture.png");
+    targetTexture.loadFromFile("target.png");
+    projectileTexture.loadFromFile("bullet.png");
+
+    //Create sprites with the texture variables
     Sprite background(backgroundTexture);
+    Sprite target(targetTexture);
+
+    //Set Size. colour and location of floor on map
     floor.setSize(Vector2f(backgroundTexture.getSize().x, 10));
     floor.setPosition(0,window.getSize().y-floor.getSize().y);
     floor.setFillColor(Color::Green);
+
+    //Set Position of the background on map;
     background.setPosition(0, 0);
+
+    Projectile proj;
+    //proj.setPosition(100,100);
+
 
     //pointer object
     //Character *newchar  = new Character(Vector2f(window.getSize()));
     //std::cout<<"size is: "<<&newchar->getSize().x<<std::endl;
+
+
     while (window.isOpen())
     {
 
@@ -39,6 +66,8 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
+            //Check event in game window. If window is closed, then tell game window is closed. If mouse is moved, then move
+            //target sprite to mouse position;
             if (event.type == sf::Event::Closed)
                 window.close();
             else if (event.type == Event::MouseMoved)
@@ -48,10 +77,15 @@ int main()
 
         }
 
+        //Check to see if funnelMove variable is 1, this is set when a mouse left click is detected, and checks to see the mouse click
+        //is infront of the player.. thus removing the possiblity of the funnel rotating behind or above the player
+
+
         if(funnelMove == 1 && Mouse::getPosition(window).x > character.getPosition().x)
         {
-
-            if(Mouse::getPosition(window).x > character.getPosition().x && (moveRotation <= -50 || moveRotation >= 50))
+            //checks to see the rotation is either less than -50 or greater than 50. This is placed first on the if list to make sure
+            //the game engine checks to see if the cursor is out of position for rotating funnel.
+            if(moveRotation <= -50 || moveRotation >= 50)
             {
                 if(character.funnel.getRotation() > -50)
                     character.rotateFunnel(-0.1);
@@ -74,6 +108,7 @@ int main()
                 else
                     funnelMove = 0;
             }
+
         }
 
         if (Keyboard::isKeyPressed(Keyboard::Left))
@@ -123,22 +158,9 @@ int main()
                 background.move(Vector2f(-0.1,0));
             }
         }
-//        if(Keyboard::isKeyPressed((Keyboard::Up)))
-//        {
-//            if(character.funnel.getRotation() > -50)
-//            {
-//                character.rotateFunnel(-0.1);
-//            }
-//        }
-//        if(Keyboard::isKeyPressed((Keyboard::Down)))
-//        {
-//            if(character.funnel.getRotation() < 50)
-//            {
-//                 character.rotateFunnel(0.1);
-//            }
-//        }
         if(Mouse::isButtonPressed(Mouse::Left))
         {
+
             if(mousecount == 0)
             {
                 float realY = window.getSize().y;
@@ -154,21 +176,36 @@ int main()
 				    funnelMove = 1;
 				}
                 mousecount = 1;
+                Projectile proj;
+                proj.setPosition(Mouse::getPosition(window).x,Mouse::getPosition(window).y);
+                proj.setRotation(diff);
+                Projectiles.push_back(proj);
             }
         }
         else
         {
             mousecount = 0;
         }
+
+
+
         window.setMouseCursorVisible(false);
         window.clear();
         window.draw(background);
+
+        if(Projectiles.size() > 0)
+        {
+            for(int p=0 ; p<Projectiles.size(); p++)
+                window.draw(Projectiles.at(p));
+        }
+
         window.draw(character);
         window.draw(character.funnel);
         window.draw(floor);
         window.draw(character.Wheel1);
         window.draw(character.Wheel2);
         window.draw(target);
+
         window.display();
     }
 
