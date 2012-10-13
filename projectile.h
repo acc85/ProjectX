@@ -7,11 +7,14 @@ class Projectile: public Sprite
 {
 
     private:
+        Vector2f direction;
         Vector2f location;
 
     public:
         static Texture projTexture;
         Projectile();
+        Vector2f getDirection();
+        void setDirection(Vector2f dir);
         Vector2f getLocation();
         void setLocation(Vector2f loc);
 
