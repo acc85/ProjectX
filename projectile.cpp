@@ -9,19 +9,8 @@ Projectile::Projectile()
     setTexture(texture);
     setScale(0.5,0.5);
     setOrigin(texture.getSize().x/2, texture.getSize().y/2);
-
-
 }
 
-Vector2f Projectile::getDirection()
-{
-    return direction;
-}
-
-void Projectile::setDirection(Vector2f dir)
-{
-    direction = dir;
-}
 
 Vector2f Projectile::getLocation()
 {
@@ -31,5 +20,15 @@ Vector2f Projectile::getLocation()
 void Projectile::setLocation(Vector2f loc)
 {
     location = loc;
+}
+
+float Projectile::getRadianRotation()
+{
+    return radianRotation;
+}
+
+void Projectile::setRadianRotation(float rad)
+{
+    radianRotation = rad;
 }
 

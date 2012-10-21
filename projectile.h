@@ -9,12 +9,13 @@ class Projectile: public Sprite
     private:
         Vector2f direction;
         Vector2f location;
+        float radianRotation;
 
     public:
         static Texture projTexture;
         Projectile();
-        Vector2f getDirection();
-        void setDirection(Vector2f dir);
+        float getRadianRotation();
+        void setRadianRotation(float rad);
         Vector2f getLocation();
         void setLocation(Vector2f loc);
 

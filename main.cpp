@@ -4,6 +4,7 @@
 #include <time.h>
 #include "character.cpp"
 #include "projectile.h"
+#include "utilities.h"
 #include <vector>
 #define PI 3.14159265
 //using namespace sf;
@@ -11,6 +12,7 @@
 
 int main()
 {
+    utilities u;
     std::vector<Projectile> Projectiles;
     int funnelMove = 0;
     float moveRotation;
@@ -40,6 +42,7 @@ int main()
     //Create sprites with the texture variables
     Sprite background(backgroundTexture);
     Sprite target(targetTexture);
+
 
     //Set Size. colour and location of floor on map
     floor.setSize(Vector2f(backgroundTexture.getSize().x, 10));
@@ -161,20 +164,18 @@ int main()
 
             if(mousecount == 0)
             {
-                float deltaY = (Mouse::getPosition(window).y - character.funnel.getPosition().y);
-				float deltaX = (Mouse::getPosition(window).x - character.funnel.getPosition().x);
+                float deltaY = ( Mouse::getPosition(window).y - character.funnel.getPosition().y);
+				float deltaX = ( Mouse::getPosition(window).x - character.funnel.getPosition().x);
+
 				Vector2f shootVector = Vector2f(deltaX,deltaY);
-				float length = sqrt((deltaX*deltaX)+(deltaY*deltaY));
+				double length = sqrt((deltaX*deltaX)+(deltaY*deltaY));
                 float normalX = deltaX/length;
-                float normalY = deltaY/length;
+                float normalY = (deltaY/length);
+                float characterPosX = character.funnel.getPosition().x;
+                float characterPosY = character.funnel.getPosition().y;
                 float overShotVectorX = normalX*window.getSize().x;
                 float overShotVectorY = normalY*window.getSize().y;
-                float offScreenPointX = character.funnel.getPosition().x+overShotVectorX;
-                float offScreenPointY = character.funnel.getPosition().y+overShotVectorY;
-                float directionX = offScreenPointX - character.funnel.getPosition().x;
-                float directionY = offScreenPointY - character.funnel.getPosition().y;
                 Vector2f offScreenPoint= Vector2f(character.funnel.getPosition().x+overShotVectorX, character.funnel.getPosition().y+overShotVectorY);
-				//std::cout<<"distance is: "<<length<<std::endl;
 				float shootAngleRadians= (atanf(deltaY/deltaX));
 				float shootAngleDegrees= (shootAngleRadians*(180/PI));
 				moveRotation = shootAngleDegrees;
@@ -182,15 +183,13 @@ int main()
 				if(diff >= -50 && diff<= 50 && Mouse::getPosition(window).x > character.getPosition().x)
 				{
 				    funnelMove = 1;
+                    proj.setRadianRotation(shootAngleRadians);
+                    proj.setPosition(characterPosX,characterPosY);
+                    proj.setLocation(offScreenPoint);
+                    proj.setRotation(moveRotation);
+                    Projectiles.push_back(proj);
 				}
                 mousecount = 1;
-                Projectile proj;
-                //proj.setPosition(Mouse::getPosition(window).x,Mouse::getPosition(window).y);
-                proj.setPosition(character.funnel.getPosition().x,character.funnel.getPosition().y);
-                proj.setDirection(Vector2f(directionX,directionY));
-                proj.setLocation(offScreenPoint);
-                proj.setRotation(diff);
-                Projectiles.push_back(proj);
             }
         }
         else
@@ -212,8 +211,7 @@ int main()
                 {
                     Time elapsed = clock.getElapsedTime();
                     window.draw(Projectiles.at(p));
-                    //std::cout<<"here: "<<Projectiles.at(0).getDirection().x<<std::endl;
-                    Projectiles.at(p).setPosition(Projectiles.at(p).getPosition().x+Projectiles.at(p).getDirection().x*0.0007, Projectiles.at(p).getPosition().y+Projectiles.at(p).getDirection().y*0.0007);
+                    Projectiles.at(p).setPosition(Projectiles.at(p).getPosition().x+cos(Projectiles.at(p).getRadianRotation())*0.4, Projectiles.at(p).getPosition().y+sin(Projectiles.at(p).getRadianRotation())*0.4);
                 }
             }
 
