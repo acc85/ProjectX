@@ -83,35 +83,45 @@ int main()
         //is infront of the player.. thus removing the possiblity of the funnel rotating behind or above the player
 
 
-        if(funnelMove == 1 && Mouse::getPosition(window).x > character.getPosition().x)
+//        if(funnelMove == 1 && Mouse::getPosition(window).x > character.getPosition().x)
+//        {
+//            //checks to see the rotation is either less than -50 or greater than 50. This is placed first on the if list to make sure
+//            //the game engine checks to see if the cursor is out of position for rotating funnel.
+//            if(moveRotation <= -50 || moveRotation >= 50)
+//            {
+//                if(character.funnel.getRotation() > -50)
+//                    character.rotateFunnel(-0.1);
+//                else
+//                    funnelMove = 0;
+//            }
+//            else if(moveRotation < 0)
+//            {
+//                if(character.funnel.getRotation() > moveRotation)
+//                    character.rotateFunnel(-0.1);
+//                else if(character.funnel.getRotation() < moveRotation)
+//                    character.rotateFunnel(0.1);
+//                else
+//                    funnelMove = 0;
+//            }
+//            else if(moveRotation > 0 )
+//            {
+//                if(character.funnel.getRotation() < moveRotation)
+//                    character.rotateFunnel(0.1);
+//                else
+//                    funnelMove = 0;
+//            }
+//
+//        }
+        if(funnelMove == 1)
         {
-            //checks to see the rotation is either less than -50 or greater than 50. This is placed first on the if list to make sure
-            //the game engine checks to see if the cursor is out of position for rotating funnel.
-            if(moveRotation <= -50 || moveRotation >= 50)
-            {
-                if(character.funnel.getRotation() > -50)
-                    character.rotateFunnel(-0.1);
-                else
-                    funnelMove = 0;
-            }
-            else if(moveRotation < 0)
-            {
-                if(character.funnel.getRotation() > moveRotation)
-                    character.rotateFunnel(-0.1);
-                else if(character.funnel.getRotation() < moveRotation)
-                    character.rotateFunnel(0.1);
-                else
-                    funnelMove = 0;
-            }
-            else if(moveRotation > 0 )
-            {
-                if(character.funnel.getRotation() < moveRotation)
-                    character.rotateFunnel(0.1);
-                else
-                    funnelMove = 0;
-            }
-
+            if(character.funnel.getRotation() < moveRotation)
+                character.rotateFunnel(0.1);
+            else if (character.funnel.getRotation() > moveRotation)
+                character.rotateFunnel(-0.1);
+            else
+                funnelMove = 0;
         }
+
 
         if (Keyboard::isKeyPressed(Keyboard::Left))
         {
@@ -179,14 +189,25 @@ int main()
 				float shootAngleRadians= (atanf(deltaY/deltaX));
 				float shootAngleDegrees= (shootAngleRadians*(180/PI));
 				moveRotation = shootAngleDegrees;
+                if (character.getPosition().x+character.getSize().x/2 < Mouse::getPosition(window).x)
+                    moveRotation +=90;
+                else
+                    moveRotation += 270;
+
+				u.printFl("character Roation is: ", character.funnel.getRotation());
 				float diff =  shootAngleDegrees;
+				u.printFl("angle is: ",moveRotation);
+//				if (character.getPosition().x+character.getSize().x/2 < Mouse::getPosition(window).x)
+//                    u.printf("mouse is: Right");
+//                else
+//                    u.printf("mouse is: Left");
 				if(diff >= -50 && diff<= 50 && Mouse::getPosition(window).x > character.getPosition().x)
 				{
 				    funnelMove = 1;
                     proj.setRadianRotation(shootAngleRadians);
                     proj.setPosition(characterPosX,characterPosY);
                     proj.setLocation(offScreenPoint);
-                    proj.setRotation(moveRotation);
+                    proj.setRotation(diff);
                     Projectiles.push_back(proj);
 				}
                 mousecount = 1;

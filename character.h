@@ -16,12 +16,14 @@ class Character: public RectangleShape
         void setHealth(int h);
         int getHealth();
         void createFunnel();
-        RectangleShape funnel;
+        //RectangleShape funnel;
         Texture wheelTexture;
+        Texture funnelTexture;
         //CircleShape Wheel1;
         //CircleShape Wheel2;
         Sprite Wheel1;
         Sprite Wheel2;
+        Sprite funnel;
         void moveCharacter(const Vector2f& offset);
         void rotateFunnel(float angle);
         void rotateWheelsLeft();

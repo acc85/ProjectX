@@ -13,6 +13,9 @@ Character::Character(Vector2f size)
     setSize(Vector2f(100.f,100.f));
     setPosition(0,size.y-getSize().y);
 
+    funnelTexture.loadFromFile("canon.png");
+    funnel.setTexture(funnelTexture);
+
     wheelTexture.loadFromFile("Wheel.png");
 
     Wheel1.setTexture(wheelTexture);
@@ -33,9 +36,9 @@ Character::Character(Vector2f size)
 //    Wheel2.setPosition(90,size.y-Wheel1.getRadius());
 //    Wheel1.setOrigin(Wheel1.getRadius(), Wheel1.getRadius());
 //    Wheel2.setOrigin(Wheel2.getRadius(), Wheel2.getRadius());
-    funnel.setSize(Vector2f(100,10));
-    funnel.setPosition(getPosition().x+(getSize().x/2),getPosition().y+(getSize().y/2));
-    funnel.setFillColor(Color::Red);
+    funnel.setOrigin(funnelTexture.getSize().x/2, 75);
+    //funnel.setRotation(90.0);
+    funnel.setPosition(getPosition().x+(getSize().x/2),getPosition().y-24);
 };
 
 Character::~Character()
