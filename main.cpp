@@ -2,7 +2,7 @@
 #include <iostream>
 #include <math.h>
 #include <time.h>
-#include "character.cpp"
+#include "character.h"
 #include "projectile.h"
 #include "utilities.h"
 #include <vector>
@@ -171,7 +171,7 @@ int main()
 				double length = sqrt((deltaX*deltaX)+(deltaY*deltaY));
                 float normalX = deltaX/length;
                 float normalY = (deltaY/length);
-                float characterPosX = character.funnel.getPosition().x;
+                float characterPosX = character.funnel.getPosition().x+10;
                 float characterPosY = character.funnel.getPosition().y;
                 float overShotVectorX = normalX*window.getSize().x;
                 float overShotVectorY = normalY*window.getSize().y;
